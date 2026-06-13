@@ -1,6 +1,6 @@
 # RubickAttention
 
-**A Feature‑Specific Doubly Stochastic Attention Mechanism for Long‑Term Time Series Forecasting**
+**A Feature‑Specific Doubly Stochastic Attention Mechanism for Long‑Term Time Series Forecasting (Single Input Single Output)**
 
 This repository contains the official implementation of the paper  
 *"RubickAttention: A Feature‑Specific Doubly Stochastic Attention Mechanism for Long‑Term Time Series Forecasting"*.
