@@ -32,6 +32,23 @@ Each notebook includes:
 ## Model Architecture
 Lookback window (q) → reshape(S × F) → Learnable Tanh transformation → Multi‑Head Attention (context‑weighted gating) → Concatenation → Alternating softmax (Rubick Axis) → Forecasting Head (Dense + Conv1D) → Prediction
 
+### How `Dense(1)` produces a 96‑step forecast from a univariate model
+
+After the RubickAttention blocks, the forecasting head transforms the internal representation directly into a multi‑step output. The key point is that `Dense(1)` **does not collapse the time axis**; it only projects the feature dimension at each time step to a single value.
+
+1. **Before the output projection**  
+   The tensor has shape `(batch, 96, some_channels)` – 96 temporal positions, each carrying a feature vector.
+
+2. **`Dense(1)` layer**  
+   A `Dense(1)` layer is applied to the last axis (the feature axis). It maps `some_channels` → 1 for every time step independently.  
+   - Input: `(batch, 96, some_channels)`  
+   - Output: `(batch, 96, 1)`
+
+3. **Result**  
+   The output is a vector of **96 scalar predictions** – one for each future hour (or time unit) – all produced in a single forward pass. No recursion or autoregressive decoding is used; the horizon is entirely handled by the convolutional forecasting head and the final `Dense` layer.
+
+This behaviour is identical to the output convention used by Autoformer, PatchTST, TimesNet, and other state‑of‑the‑art long‑term forecasting models: they all output `(batch, horizon, 1)` for univariate targets.
+
 ## Citation
 @article{mohseni2025rubickattention,
   - title   = {RubickAttention: A Feature‑Specific Doubly Stochastic Attention Mechanism for Long‑Term Time Series Forecasting},
