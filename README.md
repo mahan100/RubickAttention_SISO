@@ -1,4 +1,4 @@
-# RubickAttention
+# RubickAttention (Single Input Single Output)
 
 **A Feature‑Specific Doubly Stochastic Attention Mechanism for Long‑Term Time Series Forecasting (Single Input Single Output)**
 
